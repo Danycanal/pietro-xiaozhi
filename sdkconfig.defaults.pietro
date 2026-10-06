@@ -1,0 +1,46 @@
+# Configuracion propia: placa LAFVIN + wake word "Pietro"
+# Uso:
+#   idf.py -DSDKCONFIG_DEFAULTS="sdkconfig.defaults;sdkconfig.defaults.esp32s3;sdkconfig.defaults.pietro" build
+
+CONFIG_BOARD_TYPE_LAFVIN_AICHATBOT=y
+
+# Interfaz del firmware en castellano
+CONFIG_LANGUAGE_ES_ES=y
+
+# Cara animada a pantalla completa en vez del chat
+CONFIG_USE_EMOTE_MESSAGE_STYLE=y
+CONFIG_FLASH_EXPRESSION_ASSETS=y
+
+# Cancelacion de eco en el dispositivo (la placa tiene ES7210 + referencia del parlante)
+CONFIG_USE_DEVICE_AEC=y
+
+# --- Palabra de activacion: "Alexa" (WakeNet wn9_alexa) ---
+#
+# OJO: con USE_EMOTE_MESSAGE_STYLE la palabra NO se elige por Kconfig.
+# audio_service.cc:704 decide en runtime segun que modelos haya en la particion
+# de assets: si encuentra MultiNet usa CustomWakeWord, si no usa AfeWakeWord.
+# El paquete de expresiones trae su propio wakenet/srmodels.bin, asi que la
+# palabra se cambia REGENERANDO ese archivo (ver scratchpad/pack_alexa.py).
+# El original quedo como srmodels.bin.orig por si hay que volver atras.
+CONFIG_USE_AFE_WAKE_WORD=y
+
+# El MOTOR MultiNet7 ingles tiene que estar compilado, aunque el modelo venga de
+# la particion de assets. Si se desactiva (SR_MN_EN_NONE), esp_mn_handle_from_name()
+# devuelve null, custom_wake_word.cc lo usa sin chequear y la placa entra en
+# boot loop con "Guru Meditation Error (LoadProhibited), EXCVADDR: 0x00000000"
+# justo despues de imprimir "Command: pietro".
+CONFIG_SR_MN_EN_MULTINET7_QUANT=y
+
+# El chino no se usa: ahorra flash.
+CONFIG_SR_MN_CN_NONE=y
+
+# Permite cortarle la palabra mientras esta respondiendo
+CONFIG_WAKE_WORD_DETECTION_IN_LISTENING=y
+
+# No mandar la palabra de activacion al servidor como primer mensaje.
+# Con =y (default) el servidor recibe "Pietro" como si fuera lo que dijo el
+# usuario, y el modelo contesta "Hola Pietro". Se ve en el log como ">> Pietro".
+# Contra de desactivarlo: se pierde la verificacion del audio de la wake word
+# en el servidor, asi que un falso disparo deja la placa escuchando en vez de
+# descartarse. Si molesta, subir CUSTOM_WAKE_WORD_THRESHOLD.
+CONFIG_SEND_WAKE_WORD_DATA=n
