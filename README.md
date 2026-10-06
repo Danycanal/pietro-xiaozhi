@@ -41,8 +41,8 @@ Trampas del build en Windows:
 
 ## Servidor
 
-Por defecto la placa se activa contra el servidor oficial de xiaozhi (`CONFIG_OTA_URL`). Para usar un servidor propio hay que apuntar `CONFIG_OTA_URL` a tu endpoint OTA, que a su vez devuelve la URL del WebSocket de conversación. La placa no trae ninguna dirección de conversación fija.
+Por defecto la placa se activa contra el servidor oficial de xiaozhi (`CONFIG_OTA_URL`). cuando tengas la placa activa , buscala con wifi , desde el celular o una pc . configuras el wifi del esp a una coneccion de internet. y la asocias en la web de https://xiaozhi.me/ creas una cuenta, vas a console , registras el equipo segun el numero que te dicta el audio de la placa . 
 
 ## Aviso
 
-Proyecto personal, sin garantía ni relación con Espressif, Waveshare, LAFVIN ni los autores de xiaozhi-esp32.
+Proyecto personal Daniel Pietroboni, sin garantía ni relación con Espressif, Waveshare, LAFVIN ni los autores de xiaozhi-esp32.
